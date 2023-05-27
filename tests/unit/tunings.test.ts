@@ -53,7 +53,7 @@ describe('changesForString', ()=>{
     expect(changes).toBe(null);
   })
   
-  test('returns the changes for a tuning w/o a copedent', ()=>{
+  test('returns the changes for a tuning w/ a copedent', ()=>{
     const changes = changesForString(Tunings.e9PSG, 1);
     const changesString7 = changesForString(Tunings.e9PSG, 7);
 
