@@ -1,32 +1,54 @@
-import { Note } from './musicTheory';
+import { Note, fretsBetween, noteAtFret } from './musicTheory';
 
-type TuningStrings = Array<Note>
 type Tuning = {
+  name: string,
   root: Note,
   altRoots?: Array<Note>,
-  strings : TuningStrings
+  strings : Array<Note>
 };
 
-export const tunings:{ [key: string]: Tuning } = {
-  "A6" : {
+export const Tunings:{ [key: string]: Tuning } = {
+  "a6" : {
+    name: "A6",
     root: Note.A,
     strings : [ Note.E, Note.Cs, Note.A, Note.Fs,Note.E, Note.Cs, Note.A, Note.Fs ]
   },
-  "C6 - High E" : {
+  "c6_high_e" : {
+    name: 'C6 - High E',
     root: Note.C,
     strings :[ Note.E, Note.C, Note.A, Note.G, Note.E, Note.C, Note.A, Note.G ]
   },
-  "C6 - High G" : {
+  "c6_high_g" : {
+    name: 'C6 - High G',
     root: Note.C,
     strings: [ Note.G, Note.E, Note.C, Note.A, Note.G, Note.E, Note.C, Note.A ]
   },
-  "C6/A7" : {
+  "c6_a7" : {
+    name: 'C6/A7',
     root: Note.C,
-    altRoots : [Note.A],
+    altRoots : [ Note.A ],
     strings : [ Note.E, Note.C, Note.A, Note.G, Note.E, Note.Cs, Note.A, Note.A ]
   },
-  "E13" : {
+  "e13" : {
+    name: 'E13',
     root: Note.E,
     strings: [Note.Gs, Note.E, Note.Cs, Note.B, Note.Gs, Note.E, Note.D, Note.B ]
+  }
+}
+
+export function transposeTuningToNewRoot(tuning:Tuning, newRoot:Note):Tuning {
+  const frets = fretsBetween(tuning.root, newRoot)
+  return {
+    name : `${tuning.name}, transposed to root ${newRoot}`,
+    root: newRoot,
+    strings: tuning.strings.map( (note:Note) => (noteAtFret(note, frets)) )
+  }
+}
+
+export function transposeTuningByFrets(tuning:Tuning, fretCount:number):Tuning {
+  return {
+    name : `${tuning.name}, transposed by ${fretCount.toString()} frets`,
+    root: noteAtFret(tuning.root, fretCount),
+    strings: tuning.strings.map( (note:Note) => (noteAtFret(note, fretCount)) )
   }
 }

@@ -50,21 +50,33 @@ const noteRelationshipsArray:Array<NoteRelationships> = [
   NoteRelationships._7,
 ]
 
-export function getNoteAtFret(startingNote:Note, fret:number):Note {
+// this will always be a positive number, as a jump down can be expressed as a jump up
+// e.g. A is a minor third below C (down 3 semitones/frets, -3), A is also a 6th above C up 9 semitones
+// this relationshp can be expressed 12 + -3 = 9
+export function noteAtFret(startingNote:Note, fret:number):Note {
   const startIdx = noteArray.indexOf(startingNote);
   let destIdxs = startIdx + fret;
-  while (destIdxs >= 12) {
-    destIdxs -= 12;
+  
+  while (destIdxs < 0 ) {
+    destIdxs += 12;
   }
-  return noteArray[destIdxs];
+
+  return noteArray[destIdxs % 12];
 }
 
-export function getRelationToNote(rootNote:Note, relatedNote:Note):string {
+// this will always be a positive number, as a jump down can be expressed as a jump up
+// e.g. A is a minor third below C (down 3 semitones/frets, -2), A is also a 6th above C up 9 semitones
+// this relationshp can be expressed 12 + -3 = 9
+export function fretsBetween(rootNote:Note, relatedNote:Note):number {
   const rootIdx = noteArray.indexOf(rootNote);
   let relatedIdx = noteArray.indexOf(relatedNote);
-  if (rootIdx > relatedIdx ) {
+  while (rootIdx > relatedIdx ) {
     relatedIdx += 12;
   }
-  return noteRelationshipsArray[relatedIdx - rootIdx];
+  return relatedIdx - rootIdx;
+}
+
+export function relationToNote(rootNote:Note, relatedNote:Note):string {
+  return noteRelationshipsArray[fretsBetween(rootNote, relatedNote)];
 }
 
