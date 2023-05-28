@@ -1,6 +1,5 @@
-import { read } from 'fs';
-import { readonly } from 'vue';
-import { Note, fretsBetween, noteAtFret } from './musicTheory';
+import { read } from 'fs'
+import { Note, fretsBetween, noteAtFret } from './musicTheory'
 
 type PSGChange = {
   stringIndex: number,
@@ -23,14 +22,14 @@ export class Tuning {
   ) {}
 
   public transposeTuningToNewRoot(newRoot:Note):Tuning {
-    const frets = fretsBetween(this.root, newRoot);
+    const frets = fretsBetween(this.root, newRoot)
     return new Tuning (
       `${this.name}, transposed to root ${newRoot}`,
       newRoot,
       this.strings.map( (note:Note) => (noteAtFret(note, frets)) ),
       this.altRoots,
       this.copedent
-    );
+    )
   }
   
   public transposeTuningByFrets(fretCount:number):Tuning {
@@ -45,28 +44,31 @@ export class Tuning {
   
   public changesForString( stringIdx:number ):PSGCopedent | null {
     if (!this.copedent) {
-      return null;
+      return null
     }
-    const changesCopedent = {}
+    const changesCopedent:{
+      [key:string] : Array<PSGChange>
+    } = {}
+
     for (var pedalName in this.copedent) {
       this.copedent[pedalName].forEach( (change:PSGChange)=>{
         if ( change.stringIndex === stringIdx ) { // Here's a change that applies
-          if (changesCopedent[pedalName]) {
+          if (changesCopedent.hasOwnProperty('pedalName') === undefined) {
             changesCopedent[pedalName].push(change)
            } else {
             changesCopedent[pedalName] = [change]
            }
         }
-      });
+      })
     }
-    return changesCopedent;
+    return changesCopedent
   }
   
-  public getNoteForTuning(stringIdx:number, fret:number, change:string = null):Note {
-    const rootNote = this.strings[stringIdx];
-    let targetNote = noteAtFret(rootNote, fret);
+  public getNoteForTuning(stringIdx:number, fret:number, change:string|null = null):Note {
+    const rootNote = this.strings[stringIdx]
+    let targetNote = noteAtFret(rootNote, fret)
     if (this.copedent && change ) {
-      const changesThatMightBeApplied = this.changesForString(stringIdx);
+      const changesThatMightBeApplied = this.changesForString(stringIdx)
       if ( changesThatMightBeApplied && changesThatMightBeApplied[change]) {
         // this could be a little classier
         targetNote = noteAtFret(targetNote, changesThatMightBeApplied[change][0].change)
@@ -74,6 +76,6 @@ export class Tuning {
     }
     return targetNote
   }
-};
+}
 
 

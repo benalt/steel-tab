@@ -22,6 +22,10 @@ export enum Note {
   Gs = "G#"
 }
 
+type NoteDict = {
+  [key: string] : Note
+}
+
 // these are used for calcualations to get rid of aliases and weird names.
 enum NoteAliases {
   "Ab" = Note.Gs, // Prefer G# because a lot of country songs are in E and G# is the third there :shrug:
@@ -36,8 +40,12 @@ enum NoteAliases {
 }
 
 export function calculatableNote(note:Note) : Note {
-  if (NoteAliases[note]) {
-    return NoteAliases[note]
+  const noteAsString:string = note as string
+  // accessing these like this - i'm not sure how else to get TS to accept it w/o the code becoming unreadable
+  // @ts-ignore 
+  if (NoteAliases[noteAsString]) {
+    // @ts-ignore
+    return NoteAliases[noteAsString]
   } else {
     return note
   }
@@ -86,35 +94,35 @@ const noteRelationshipsArray:Array<NoteRelationships> = [
 // e.g. A is a minor third below C (down 3 semitones/frets, -3), A is also a 6th above C up 9 semitones
 // this relationshp can be expressed 12 + -3 = 9
 export function noteAtFret(rootNote:Note, fret:number):Note {
-  rootNote = calculatableNote(rootNote);
-  const startIdx = noteArray.indexOf(rootNote);
-  let destIdxs = startIdx + fret;
+  rootNote = calculatableNote(rootNote)
+  const startIdx = noteArray.indexOf(rootNote)
+  let destIdxs = startIdx + fret
 
   while (destIdxs < 0 ) {
-    destIdxs += 12;
+    destIdxs += 12
   }
 
-  return noteArray[destIdxs % 12];
+  return noteArray[destIdxs % 12]
 }
 
 // this will always be a positive number, as a jump down can be expressed as a jump up
 // e.g. A is a minor third below C (down 3 semitones/frets, -2), A is also a 6th above C up 9 semitones
 // this relationshp can be expressed 12 + -3 = 9
 export function fretsBetween(rootNote:Note, relatedNote:Note):number {
-  rootNote = calculatableNote(rootNote);
-  relatedNote = calculatableNote(relatedNote);
-  const rootIdx = noteArray.indexOf(rootNote);
-  let relatedIdx = noteArray.indexOf(relatedNote);
+  rootNote = calculatableNote(rootNote)
+  relatedNote = calculatableNote(relatedNote)
+  const rootIdx = noteArray.indexOf(rootNote)
+  let relatedIdx = noteArray.indexOf(relatedNote)
   
   while (rootIdx > relatedIdx ) {
-    relatedIdx += 12;
+    relatedIdx += 12
   }
-  return relatedIdx - rootIdx;
+  return relatedIdx - rootIdx
 }
 
 export function relationToNote(rootNote:Note, relatedNote:Note):string {
-  rootNote = calculatableNote(rootNote);
-  relatedNote = calculatableNote(relatedNote);
+  rootNote = calculatableNote(rootNote)
+  relatedNote = calculatableNote(relatedNote)
 
-  return noteRelationshipsArray[fretsBetween(rootNote, relatedNote)];
+  return noteRelationshipsArray[fretsBetween(rootNote, relatedNote)]
 }

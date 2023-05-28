@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { Tuning } from '../lib/tuning';
-import { Note, relationToNote, noteAtFret } from "../lib/musicTheory";
-import func from '../../vue-temp/vue-editor-bridge';
+import { Tuning } from '../lib/tuning'
+import { Note, relationToNote, noteAtFret } from "../lib/musicTheory"
 
 const props = defineProps({
-  tuning: Tuning
+  tuning: {
+    type: Tuning,
+    required: true
+  }
 })
 
 function findRelationToNote(root:Note, note:Note):string {
@@ -12,10 +14,16 @@ function findRelationToNote(root:Note, note:Note):string {
 }
   
 function getChangeFor(stringIdx:number, pedal:string):number | null {
-  const changes = props.tuning.changesForString(stringIdx);
+  const changes = props.tuning?.changesForString(stringIdx)
   if (changes && changes[pedal]) {
-    return changes[pedal][0].change;
+    return changes[pedal][0].change
   }
+  return null
+}
+
+function getNoteAtFret(stringNote:Note, change:number|null):string {
+  if (!change) { return ""}
+  return noteAtFret(stringNote, change ).toString()
 }
 
 </script>
@@ -29,7 +37,7 @@ function getChangeFor(stringIdx:number, pedal:string):number | null {
       <td>Note</td>
       <td>Scale Degree from {{tuning.root}}</td>
       <td v-for="(altNote, idx) in tuning.altRoots" :key="`tuning-${tuning.name}-alt-1-${idx}-idx`">Scale Degree from {{altNote}}</td>
-      <td v-for="(pedal, key) in tuning.copedent" :key="`tuning-${tuning.name}-alt-1-${key}`">{{key.toUpperCase()}}</td>
+      <td v-for="(pedal, key) in tuning.copedent" :key="`tuning-${tuning.name}-alt-1-${key}`">{{(key as string).toUpperCase()}}</td>
     </tr>
     <tr v-for="(stringNote, idx) in tuning.strings" :key="`tuning-${tuning.name}-${idx}-idx`">
       <td>{{ idx + 1 }}</td>
@@ -39,9 +47,9 @@ function getChangeFor(stringIdx:number, pedal:string):number | null {
         {{findRelationToNote(altNote, stringNote)}}
       </td>
       <td v-for="(pedal, key) in tuning.copedent" :key="`tuning-${tuning.name}-alt-1-${key}`">
-        <span v-if="getChangeFor(idx, key)">
-        {{ getChangeFor(idx, key)}}
-        {{ noteAtFret(stringNote, getChangeFor(idx, key) ) }}
+        <span v-if="getChangeFor(idx, key as string)">
+        {{ getChangeFor(idx, key as string)}}
+        {{ getNoteAtFret(stringNote, getChangeFor(idx, key as string) ) }}
         </span> 
       </td>
     </tr>
