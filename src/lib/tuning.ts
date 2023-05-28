@@ -12,38 +12,49 @@ type PSGCopedent = {
 }
 
 export class Tuning {  
-  
-  
-  constructor(
-    public readonly uuid: string,
-    public readonly name: string,
-    public readonly root: Note,
-    public readonly strings: Array<Note>,
-    public readonly altRoots: Array<Note> | null = null,
-    public readonly copedent: PSGCopedent | null = null,
-  ) {}
+  public readonly uuid: string
+  public readonly name: string
+  public readonly root: Note
+  public readonly strings: Array<Note>
+  public readonly altRoots: Array<Note> | undefined
+  public readonly copedent: PSGCopedent | undefined
+
+  constructor(options:{name:string, root:Note, strings: Array<Note>, altRoots?: Array<Note>, copedent?:PSGCopedent, uuid?: string }  
+  ) {
+    this.name = options.name
+    this.strings = options.strings
+    this.root = options.root
+    
+    if (options.altRoots) { this.altRoots = options.altRoots }
+    if (options.altRoots) { this.altRoots = options.altRoots }
+    if (options.copedent) { this.copedent = options.copedent }
+    
+    if (options.uuid) {
+      this.uuid = options.uuid
+    } else {
+      this.uuid = uuidv4();
+    }
+  }
 
   public transposeTuningToNewRoot(newRoot:Note):Tuning {
     const frets = fretsBetween(this.root, newRoot)
-    return new Tuning (
-      uuidv4(),
-      `${this.name}, transposed to root ${newRoot}`,
-      newRoot,
-      this.strings.map( (note:Note) => (noteAtFret(note, frets)) ),
-      this.altRoots,
-      this.copedent
-    )
+    return new Tuning ({
+      name: `${this.name}, transposed to root ${newRoot}`,
+      root: newRoot,
+      strings: this.strings.map( (note:Note) => (noteAtFret(note, frets)) ),
+      altRoots: this.altRoots?.map( (note:Note) => (noteAtFret(note, frets)) ),
+      copedent: this.copedent
+    })
   }
   
   public transposeTuningByFrets(fretCount:number):Tuning {
-    return new Tuning (
-      uuidv4(),
-      `${this.name}, transposed by ${fretCount.toString()} frets`,
-      noteAtFret(this.root, fretCount),
-      this.strings.map( (note:Note) => (noteAtFret(note, fretCount)) ),
-      this.altRoots,
-      this.copedent
-    )
+    return new Tuning ({
+      name: `${this.name}, transposed by ${fretCount.toString()} frets`,
+      root: noteAtFret(this.root, fretCount),
+      strings: this.strings.map( (note:Note) => (noteAtFret(note, fretCount)) ),
+      altRoots: this.altRoots?.map( (note:Note) => (noteAtFret(note, fretCount)) ),
+      copedent: this.copedent
+    })
   }
   
   public changesForString( stringIdx:number ):PSGCopedent | null {
