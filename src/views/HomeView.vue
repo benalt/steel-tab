@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import TuningList from "../components/TuningsList.vue"
 </script>
 
 <template>
-  TODO: Setup  
+  <TuningList /> 
 </template>

@@ -53,15 +53,15 @@ const noteArray:Array<Note>  = [
 // to help desribe what is going on in any played position
 export enum NoteRelationships {
   '_R' = 'root', // unison
-  '_b2' = 'b2/b9', // or b9
-  '_2' = '2/9',
+  '_b2' = 'b2', // or b9
+  '_2' = '2',
   '_b3' = 'b3',
   '_3' = '3',
-  '_4' = '4/11',
-  '_b5' = 'b5/#11',  
+  '_4' = '4',
+  '_b5' = 'b5',  
   '_5' = '5',
   '_s5' = '#5',
-  '_6' = '6/13',
+  '_6' = '6',
   '_b7' = 'b7',
   '_7' = '♮7'
 }

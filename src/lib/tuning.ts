@@ -12,15 +12,15 @@ type PSGCopedent = {
 }
 
 export class Tuning {  
-
+  
+  
   constructor(
-    readonly name: string,
-    readonly root: Note,
-    readonly strings: Array<Note>,
-    readonly copedent: PSGCopedent = null,
-  ) {
-
-  }
+    public readonly name: string,
+    public readonly root: Note,
+    public readonly strings: Array<Note>,
+    public readonly altRoots: Array<Note> | null = null,
+    public readonly copedent: PSGCopedent | null = null,
+  ) {}
 
   public transposeTuningToNewRoot(newRoot:Note):Tuning {
     const frets = fretsBetween(this.root, newRoot);
@@ -28,6 +28,7 @@ export class Tuning {
       `${this.name}, transposed to root ${newRoot}`,
       newRoot,
       this.strings.map( (note:Note) => (noteAtFret(note, frets)) ),
+      this.altRoots,
       this.copedent
     );
   }
@@ -37,6 +38,7 @@ export class Tuning {
       `${this.name}, transposed by ${fretCount.toString()} frets`,
       noteAtFret(this.root, fretCount),
       this.strings.map( (note:Note) => (noteAtFret(note, fretCount)) ),
+      this.altRoots,
       this.copedent
     )
   }
@@ -65,7 +67,7 @@ export class Tuning {
     let targetNote = noteAtFret(rootNote, fret);
     if (this.copedent && change ) {
       const changesThatMightBeApplied = this.changesForString(stringIdx);
-      if ( changesThatMightBeApplied[change]) {
+      if ( changesThatMightBeApplied && changesThatMightBeApplied[change]) {
         // this could be a little classier
         targetNote = noteAtFret(targetNote, changesThatMightBeApplied[change][0].change)
       }    
