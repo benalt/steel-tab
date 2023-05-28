@@ -1,4 +1,4 @@
-import { Note, NoteRelationships, noteAtFret, relationToNote, fretsBetween, calculatableNote } from '../../src/lib/musicTheory';
+import { Note, NoteRelationships, noteAtFret, relationToNote, fretsBetween, calculatableNote } from '../src/lib/musicTheory';
 import { describe, expect, test } from 'vitest'
 
 describe('calculatableNote', ()=>{

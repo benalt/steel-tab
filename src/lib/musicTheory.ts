@@ -66,7 +66,7 @@ export enum NoteRelationships {
   '_7' = '♮7'
 }
 
-// used along with noteArray to describe what's going on with current Context
+// used along with noteArray to describe how a note relates to a root
 const noteRelationshipsArray:Array<NoteRelationships> = [
   NoteRelationships._R,
   NoteRelationships._b2,
