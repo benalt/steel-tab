@@ -7,8 +7,6 @@ const props = defineProps({
   tuning: Tuning
 })
 
-console.log(props.tuning)
-
 function findRelationToNote(root:Note, note:Note):string {
   return relationToNote(root, note)
 }
@@ -19,7 +17,6 @@ function getChangeFor(stringIdx:number, pedal:string):number | null {
     return changes[pedal][0].change;
   }
 }
-
 
 </script>
 
