@@ -8,7 +8,7 @@ let tunings;
 describe('transposing', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
-    tunings = useTunings();
+    tunings = useTunings().standardTunings;
   })
   
   test('it transposes up with a new root', ()=>{
@@ -52,7 +52,7 @@ describe('transposing', () => {
 describe('changesForString', ()=>{
   beforeEach(() => {
     setActivePinia(createPinia())
-    tunings = useTunings();
+    tunings = useTunings().standardTunings;
   })
 
   test('returns null for a tuning w/o a copedent', ()=>{
@@ -76,7 +76,7 @@ describe('noteForTuning', () => {
   
   beforeEach(() => {
     setActivePinia(createPinia())
-    tunings = useTunings();
+    tunings = useTunings().standardTunings;
   })
 
   test('returns null for a tuning w/o a copedent', () => {

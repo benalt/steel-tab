@@ -1,5 +1,6 @@
 import { read } from 'fs'
 import { Note, fretsBetween, noteAtFret } from './musicTheory'
+import {v4 as uuidv4} from 'uuid';
 
 type PSGChange = {
   stringIndex: number,
@@ -14,6 +15,7 @@ export class Tuning {
   
   
   constructor(
+    public readonly uuid: string,
     public readonly name: string,
     public readonly root: Note,
     public readonly strings: Array<Note>,
@@ -24,6 +26,7 @@ export class Tuning {
   public transposeTuningToNewRoot(newRoot:Note):Tuning {
     const frets = fretsBetween(this.root, newRoot)
     return new Tuning (
+      uuidv4(),
       `${this.name}, transposed to root ${newRoot}`,
       newRoot,
       this.strings.map( (note:Note) => (noteAtFret(note, frets)) ),
@@ -34,6 +37,7 @@ export class Tuning {
   
   public transposeTuningByFrets(fretCount:number):Tuning {
     return new Tuning (
+      uuidv4(),
       `${this.name}, transposed by ${fretCount.toString()} frets`,
       noteAtFret(this.root, fretCount),
       this.strings.map( (note:Note) => (noteAtFret(note, fretCount)) ),
