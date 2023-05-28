@@ -14,55 +14,55 @@ describe('transposing', () => {
   test('it transposes up with a new root', ()=>{
     const newTuning = tunings.a6.transposeTuningToNewRoot(Note.C);
     expect(newTuning.root).toBe(Note.C);
-    expect(newTuning.strings[0]).toBe(Note.G);
-    expect(newTuning.strings[1]).toBe(Note.E);
-    expect(newTuning.strings[2]).toBe(Note.C);
-    expect(newTuning.strings[3]).toBe(Note.A);
+    expect(newTuning.courses[0]).toBe(Note.G);
+    expect(newTuning.courses[1]).toBe(Note.E);
+    expect(newTuning.courses[2]).toBe(Note.C);
+    expect(newTuning.courses[3]).toBe(Note.A);
   })
   
   test('it transposes down with a new root', ()=>{
     const newTuning = tunings.a6.transposeTuningToNewRoot(Note.G);
     expect(newTuning.root).toBe(Note.G);
-    expect(newTuning.strings[0]).toBe(Note.D);
-    expect(newTuning.strings[1]).toBe(Note.B);
-    expect(newTuning.strings[2]).toBe(Note.G);
-    expect(newTuning.strings[3]).toBe(Note.E);
+    expect(newTuning.courses[0]).toBe(Note.D);
+    expect(newTuning.courses[1]).toBe(Note.B);
+    expect(newTuning.courses[2]).toBe(Note.G);
+    expect(newTuning.courses[3]).toBe(Note.E);
   })
 
   test('it transposes up fret count', ()=>{
     const newTuning = tunings.a6.transposeTuningByFrets(3);
     expect(newTuning.root).toBe(Note.C);
-    expect(newTuning.strings[0]).toBe(Note.G);
-    expect(newTuning.strings[1]).toBe(Note.E);
-    expect(newTuning.strings[2]).toBe(Note.C);
-    expect(newTuning.strings[3]).toBe(Note.A);
+    expect(newTuning.courses[0]).toBe(Note.G);
+    expect(newTuning.courses[1]).toBe(Note.E);
+    expect(newTuning.courses[2]).toBe(Note.C);
+    expect(newTuning.courses[3]).toBe(Note.A);
   })
 
   test('it transposes down fret count', ()=>{
     const newTuning = tunings.a6.transposeTuningByFrets(-2);
     expect(newTuning.root).toBe(Note.G);
-    expect(newTuning.strings[0]).toBe(Note.D);
-    expect(newTuning.strings[1]).toBe(Note.B);
-    expect(newTuning.strings[2]).toBe(Note.G);
-    expect(newTuning.strings[3]).toBe(Note.E);
+    expect(newTuning.courses[0]).toBe(Note.D);
+    expect(newTuning.courses[1]).toBe(Note.B);
+    expect(newTuning.courses[2]).toBe(Note.G);
+    expect(newTuning.courses[3]).toBe(Note.E);
   })
 
 })
 
-describe('changesForString', ()=>{
+describe('changesForCourse', ()=>{
   beforeEach(() => {
     setActivePinia(createPinia())
     tunings = useTunings().standardTunings;
   })
 
   test('returns null for a tuning w/o a copedent', ()=>{
-    const changes = tunings.a6.changesForString(1);
+    const changes = tunings.a6.changesForCourse(1);
     expect(changes).toBe(null);
   })
   
   test('returns the changes for a tuning w/ a copedent', ()=>{
-    const changes = tunings.e9PSG.changesForString(1);
-    const changesString7 = tunings.e9PSG.changesForString(7);
+    const changes = tunings.e9PSG.changesForCourse(1);
+    const changesString7 = tunings.e9PSG.changesForCourse(7);
 
     expect(Object.keys(changes)).toEqual(['rl', 'rr_half', 'rr'])
     expect(Object.keys(changesString7)).toEqual(['ll', 'lr'])

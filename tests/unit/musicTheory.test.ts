@@ -46,7 +46,7 @@ describe('noteAtFret', () => {
     expect( noteAtFret(Note.Af, 26)).toBe(Note.Bf) // this will undergo normalization
   })
 
-  test('it returns the note at fret -2', () => {
+  test('it returns the note at negative frets', () => {
     expect( noteAtFret(Note.A, -2)).toBe(Note.G)
     expect( noteAtFret(Note.A, -5)).toBe(Note.E)
     expect( noteAtFret(Note.Af, -2)).toBe(Note.Fs)

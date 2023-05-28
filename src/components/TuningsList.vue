@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { useTunings } from "../stores/TuningStore"
-  const tunings = useTunings().standardTunings;
+import { useTunings } from "../stores/TuningStore"
+const tunings = useTunings().standardTunings;
 </script>
 
 <template>
@@ -12,7 +12,4 @@
   </ul>
 </template>
 
-
-<style>
-
-</style>
+<style></style>

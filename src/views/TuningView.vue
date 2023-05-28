@@ -6,7 +6,6 @@ const tunings = useTunings().standardTunings
 const route = useRoute()
 // @ts-ignore
 const tuning = tunings[route.params.key as string]
-
 </script>
 
 <template>

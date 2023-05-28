@@ -3,7 +3,7 @@ import { Note, fretsBetween, noteAtFret } from './musicTheory'
 import {v4 as uuidv4} from 'uuid';
 
 type PSGChange = {
-  stringIndex: number,
+  courseIndex: number,
   change: number 
 }
 
@@ -15,14 +15,14 @@ export class Tuning {
   public readonly uuid: string
   public readonly name: string
   public readonly root: Note
-  public readonly strings: Array<Note>
+  public readonly courses: Array<Note>
   public readonly altRoots: Array<Note> | undefined
   public readonly copedent: PSGCopedent | undefined
 
-  constructor(options:{name:string, root:Note, strings: Array<Note>, altRoots?: Array<Note>, copedent?:PSGCopedent, uuid?: string }  
+  constructor(options:{name:string, root:Note, courses: Array<Note>, altRoots?: Array<Note>, copedent?:PSGCopedent, uuid?: string }  
   ) {
     this.name = options.name
-    this.strings = options.strings
+    this.courses = options.courses
     this.root = options.root
     
     if (options.altRoots) { this.altRoots = options.altRoots }
@@ -41,7 +41,7 @@ export class Tuning {
     return new Tuning ({
       name: `${this.name}, transposed to root ${newRoot}`,
       root: newRoot,
-      strings: this.strings.map( (note:Note) => (noteAtFret(note, frets)) ),
+      courses: this.courses.map( (note:Note) => (noteAtFret(note, frets)) ),
       altRoots: this.altRoots?.map( (note:Note) => (noteAtFret(note, frets)) ),
       copedent: this.copedent
     })
@@ -51,13 +51,13 @@ export class Tuning {
     return new Tuning ({
       name: `${this.name}, transposed by ${fretCount.toString()} frets`,
       root: noteAtFret(this.root, fretCount),
-      strings: this.strings.map( (note:Note) => (noteAtFret(note, fretCount)) ),
+      courses: this.courses.map( (note:Note) => (noteAtFret(note, fretCount)) ),
       altRoots: this.altRoots?.map( (note:Note) => (noteAtFret(note, fretCount)) ),
       copedent: this.copedent
     })
   }
   
-  public changesForString( stringIdx:number ):PSGCopedent | null {
+  public changesForCourse( courseIndex:number ):PSGCopedent | null {
     if (!this.copedent) {
       return null
     }
@@ -67,7 +67,7 @@ export class Tuning {
 
     for (var pedalName in this.copedent) {
       this.copedent[pedalName].forEach( (change:PSGChange)=>{
-        if ( change.stringIndex === stringIdx ) { // Here's a change that applies
+        if ( change.courseIndex === courseIndex ) { // Here's a change that applies
           if (changesCopedent.hasOwnProperty('pedalName') === undefined) {
             changesCopedent[pedalName].push(change)
            } else {
@@ -79,11 +79,11 @@ export class Tuning {
     return changesCopedent
   }
   
-  public getNoteForTuning(stringIdx:number, fret:number, change:string|null = null):Note {
-    const rootNote = this.strings[stringIdx]
+  public getNoteForTuning(courseIndex:number, fret:number, change:string|null = null):Note {
+    const rootNote = this.courses[courseIndex]
     let targetNote = noteAtFret(rootNote, fret)
     if (this.copedent && change ) {
-      const changesThatMightBeApplied = this.changesForString(stringIdx)
+      const changesThatMightBeApplied = this.changesForCourse(courseIndex)
       if ( changesThatMightBeApplied && changesThatMightBeApplied[change]) {
         // this could be a little classier
         targetNote = noteAtFret(targetNote, changesThatMightBeApplied[change][0].change)

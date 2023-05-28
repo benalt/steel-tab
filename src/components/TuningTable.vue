@@ -13,17 +13,17 @@ function findRelationToNote(root:Note, note:Note):string {
   return relationToNote(root, note)
 }
   
-function getChangeFor(stringIdx:number, pedal:string):number | null {
-  const changes = props.tuning?.changesForString(stringIdx)
+function getChangeFor(courseIndex:number, pedal:string):number | null {
+  const changes = props.tuning?.changesForCourse(courseIndex)
   if (changes && changes[pedal]) {
     return changes[pedal][0].change
   }
   return null
 }
 
-function getNoteAtFret(stringNote:Note, change:number|null):string {
+function getNoteAtFret(courseNote:Note, change:number|null):string {
   if (!change) { return ""}
-  return noteAtFret(stringNote, change ).toString()
+  return noteAtFret(courseNote, change ).toString()
 }
 
 </script>
@@ -39,17 +39,17 @@ function getNoteAtFret(stringNote:Note, change:number|null):string {
       <td v-for="(altNote, idx) in tuning.altRoots" :key="`tuning-${tuning.name}-alt-1-${idx}-idx`">Scale Degree from {{altNote}}</td>
       <td v-for="(pedal, key) in tuning.copedent" :key="`tuning-${tuning.name}-alt-1-${key}`">{{(key as string).toUpperCase()}}</td>
     </tr>
-    <tr v-for="(stringNote, idx) in tuning.strings" :key="`tuning-${tuning.name}-${idx}-idx`">
+    <tr v-for="(courseNote, idx) in tuning.courses" :key="`tuning-${tuning.name}-${idx}-idx`">
       <td>{{ idx + 1 }}</td>
-      <td>{{stringNote}}</td>
-      <td>{{findRelationToNote(tuning.root, stringNote)}}</td>
+      <td>{{courseNote}}</td>
+      <td>{{findRelationToNote(tuning.root, courseNote)}}</td>
       <td v-for="(altNote, idx2) in tuning.altRoots" :key="`tuning-${tuning.name}-alt-1-${idx2}-idx`">
-        {{findRelationToNote(altNote, stringNote)}}
+        {{findRelationToNote(altNote, courseNote)}}
       </td>
       <td v-for="(pedal, key) in tuning.copedent" :key="`tuning-${tuning.name}-alt-1-${key}`">
         <span v-if="getChangeFor(idx, key as string)">
         {{ getChangeFor(idx, key as string)}}
-        {{ getNoteAtFret(stringNote, getChangeFor(idx, key as string) ) }}
+        {{ getNoteAtFret(courseNote, getChangeFor(idx, key as string) ) }}
         </span> 
       </td>
     </tr>

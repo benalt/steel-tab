@@ -39,6 +39,51 @@ enum NoteAliases {
   "Gf" = Note.Fs
 }
 
+export enum KeyOf {
+  Af = "Ab",
+  Af_min = "Ab minor",
+  A = "A",
+  A_min = "A minor",
+  Bf= "Bb",
+  Bf_min = "Bb minor",
+  B = "B",
+  B_min = "B minor",
+  C = "C",
+  C_min = "C minor",
+  Cs = "C#",
+  Cs_min = "C# minor",
+  Df = "Db",
+  Df_min = "Db minor",
+  D = "D",
+  D_min = "D minor",
+  Ef = "Eb",
+  Ef_min = "Eb minor",
+  E = "E",
+  E_min = "E minor",
+  F = "F",
+  F_min = "F minor",
+  Fs = "F#",
+  Fs_min = "F# minor",
+  G = "G",
+  G_min = "G minor",
+}
+
+export enum ChordType {
+  maj = "",
+  min = "m",
+  dom7 = "7",
+  maj7 = "M7",
+  min7 = "m7",
+  dim = "dim",
+  m7b5 = "m7b5",
+  aug = "aug",
+}
+
+export type Chord = {
+  rootNote: Note,
+  chordType: ChordType
+}
+
 export function calculatableNote(note:Note) : Note {
   const noteAsString:string = note as string
   // accessing these like this - i'm not sure how else to get TS to accept it w/o the code becoming unreadable

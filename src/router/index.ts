@@ -11,7 +11,7 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/songs/:id',
+      path: '/song/:key',
       name: 'Son Detail',
       component: () => import('../views/SongView.vue'),
     },
